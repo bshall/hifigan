@@ -1,0 +1,4 @@
+tensorboard==2.7.0
+torch==1.9.1
+torchaudio==0.9.1
+tqdm==4.62.3
