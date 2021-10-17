@@ -247,31 +247,36 @@ class ResBlock2(torch.nn.Module):
 
 
 def _hifigan(
-    name: str, pretrained: bool = True, progress: bool = True
+    name: str,
+    pretrained: bool = True,
+    progress: bool = True,
+    map_location=None,
 ) -> HifiganGenerator:
     hifigan = HifiganGenerator()
     if pretrained:
-        checkpoint = torch.hub.load_state_dict_from_url(URLS[name], progress=progress)
-        consume_prefix_in_state_dict_if_present(
-            checkpoint["generator"]["model"], "module."
+        checkpoint = torch.hub.load_state_dict_from_url(
+            URLS[name], map_location=map_location, progress=progress
         )
+        consume_prefix_in_state_dict_if_present(checkpoint, "module.")
         hifigan.load_state_dict(checkpoint)
         hifigan.eval()
         hifigan.remove_weight_norm()
     return hifigan
 
 
-def hifigan(pretrained: bool = True, progress: bool = True) -> HifiganGenerator:
-    return _hifigan("hifigan", pretrained, progress)
+def hifigan(
+    pretrained: bool = True, progress: bool = True, map_location=None
+) -> HifiganGenerator:
+    return _hifigan("hifigan", pretrained, progress, map_location)
 
 
 def hifigan_hubert_soft(
-    pretrained: bool = True, progress: bool = True
+    pretrained: bool = True, progress: bool = True, map_location=None
 ) -> HifiganGenerator:
-    return _hifigan("hifigan-hubert-soft", pretrained, progress)
+    return _hifigan("hifigan-hubert-soft", pretrained, progress, map_location=None)
 
 
 def hifigan_hubert_discrete(
-    pretrained: bool = True, progress: bool = True
+    pretrained: bool = True, progress: bool = True, map_location=None
 ) -> HifiganGenerator:
-    return _hifigan("hifigan-hubert-discrete", pretrained, progress)
+    return _hifigan("hifigan-hubert-discrete", pretrained, progress, map_location=None)
