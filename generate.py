@@ -42,8 +42,8 @@ if __name__ == "__main__":
     parser.add_argument(
         "--model-name",
         help="available models",
-        choices=["hifigan", "hifigan-hubert-soft", "hifigan-hubert-discrete"],
-        default="hifigan-hubert-soft",
+        choices=["hifigan", "hifigan_hubert_soft", "hifigan_hubert_discrete"],
+        default="hifigan_hubert_soft",
     )
     args = parser.parse_args()
 

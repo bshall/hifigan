@@ -15,7 +15,7 @@ import torch
 import numpy as np
 
 # Load checkpoint
-hifigan = torch.hub.load("bshall/hifigan:main", "hifigan-hubert-soft").cuda()
+hifigan = torch.hub.load("bshall/hifigan:main", "hifigan_hubert_soft").cuda()
 # Load mel-spectrogram
 mel = torch.from_numpy(np.load("path/to/mel")).unsqueeze(0).cuda()
 # Generate
