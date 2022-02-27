@@ -30,12 +30,14 @@ if __name__ == "__main__":
         description="Generate audio for a directory of mel-spectrogams using HiFi-GAN."
     )
     parser.add_argument(
-        "in-dir",
+        "in_dir",
+        metavar="in-dir",
         help="path to directory containing the mel-spectrograms",
         type=Path,
     )
     parser.add_argument(
-        "out-dir",
+        "out_dir",
+        metavar="out-dir",
         help="path to output directory",
         type=Path,
     )
