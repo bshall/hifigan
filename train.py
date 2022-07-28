@@ -144,6 +144,8 @@ def train_model(rank, world_size, args):
             logger=logger,
             finetune=args.finetune,
         )
+    else:
+        global_step, best_loss = 0, float("inf")
 
     if args.finetune:
         global_step, best_loss = 0, float("inf")
@@ -301,12 +303,14 @@ def train_model(rank, world_size, args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Train or finetune HiFi-GAN.")
     parser.add_argument(
-        "dataset-dir",
+        "dataset_dir",
+        metavar="dataset-dir",
         help="path to the preprocessed data directory",
         type=Path,
     )
     parser.add_argument(
-        "checkpoint-dir",
+        "checkpoint_dir",
+        metavar="checkpoint-dir",
         help="path to the checkpoint directory",
         type=Path,
     )

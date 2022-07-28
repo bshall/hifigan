@@ -40,8 +40,12 @@ def preprocess_dataset(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Resample an audio dataset.")
-    parser.add_argument("in-dir", help="path to the dataset directory", type=Path)
-    parser.add_argument("out-dir", help="path to the output directory", type=Path)
+    parser.add_argument(
+        "in_dir", metavar="in-dir", help="path to the dataset directory.", type=Path
+    )
+    parser.add_argument(
+        "out_dir", metavar="out-dir", help="path to the output directory.", type=Path
+    )
     parser.add_argument(
         "--sample-rate",
         help="target sample rate (default 16kHz)",

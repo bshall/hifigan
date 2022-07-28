@@ -7,10 +7,9 @@ from tqdm import tqdm
 
 
 def generate(args):
-    args.out_dir.mkdir(exist_ok=True, parents=True)
-
     print("Loading checkpoint")
-    hifigan = torch.hub.load("bshall/hifigan:main", args.model_name).cuda()
+    model_name = f"hifigan_hubert_{args.model}" if args.model != "base" else "hifigan"
+    hifigan = torch.hub.load("bshall/hifigan:main", model_name).cuda()
 
     print(f"Generating audio from {args.in_dir}")
     for path in tqdm(list(args.in_dir.rglob("*.npy"))):
@@ -30,22 +29,21 @@ if __name__ == "__main__":
         description="Generate audio for a directory of mel-spectrogams using HiFi-GAN."
     )
     parser.add_argument(
+        "model",
+        help="available models (HuBERT-Soft, HuBERT-Discrete, or Base).",
+        choices=["soft", "discrete", "base"],
+    )
+    parser.add_argument(
         "in_dir",
         metavar="in-dir",
-        help="path to directory containing the mel-spectrograms",
+        help="path to input directory containing the mel-spectrograms.",
         type=Path,
     )
     parser.add_argument(
         "out_dir",
         metavar="out-dir",
-        help="path to output directory",
+        help="path to output directory.",
         type=Path,
-    )
-    parser.add_argument(
-        "--model-name",
-        help="available models",
-        choices=["hifigan", "hifigan_hubert_soft", "hifigan_hubert_discrete"],
-        default="hifigan_hubert_soft",
     )
     args = parser.parse_args()
 

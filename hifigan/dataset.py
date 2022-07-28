@@ -36,18 +36,31 @@ class LogMelSpectrogram(torch.nn.Module):
 
 class MelDataset(Dataset):
     def __init__(
-        self, root, segment_length, sample_rate, hop_length, train=True, finetune=False
+        self,
+        root: Path,
+        segment_length: int,
+        sample_rate: int,
+        hop_length: int,
+        train: bool = True,
+        finetune: bool = False,
     ):
-        self.root = Path(root)
+        self.wavs_dir = root / "wavs"
+        self.mels_dir = root / "mels"
+        self.data_dir = self.wavs_dir if not finetune else self.mels_dir
+
         self.segment_length = segment_length
         self.sample_rate = sample_rate
         self.hop_length = hop_length
         self.train = train
         self.finetune = finetune
 
-        split = "train.txt" if train else "validation.txt"
-        with open(self.root / split) as file:
-            self.metadata = [line.strip() for line in file]
+        suffix = ".wav" if not finetune else ".npy"
+        pattern = f"train/**/*{suffix}" if train else "dev/**/*{suffix}"
+
+        self.metadata = [
+            path.relative_to(self.data_dir).with_suffix("")
+            for path in self.data_dir.rglob(pattern)
+        ]
 
         self.logmel = LogMelSpectrogram()
 
@@ -56,7 +69,7 @@ class MelDataset(Dataset):
 
     def __getitem__(self, index):
         path = self.metadata[index]
-        wav_path = self.root / "wavs" / path
+        wav_path = self.wavs_dir / path
 
         info = torchaudio.info(wav_path.with_suffix(".wav"))
         if info.sample_rate != self.sample_rate:
@@ -65,7 +78,7 @@ class MelDataset(Dataset):
             )
 
         if self.finetune:
-            mel_path = self.root / "mels" / path
+            mel_path = self.mels_dir / path
             src_logmel = torch.from_numpy(np.load(mel_path.with_suffix(".npy")))
             src_logmel = src_logmel.unsqueeze(0)
 
