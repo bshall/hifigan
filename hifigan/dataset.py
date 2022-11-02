@@ -55,7 +55,7 @@ class MelDataset(Dataset):
         self.finetune = finetune
 
         suffix = ".wav" if not finetune else ".npy"
-        pattern = f"train/**/*{suffix}" if train else "dev/**/*{suffix}"
+        pattern = f"train/**/*{suffix}" if train else f"dev/**/*{suffix}"
 
         self.metadata = [
             path.relative_to(self.data_dir).with_suffix("")
