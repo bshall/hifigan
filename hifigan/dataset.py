@@ -103,7 +103,7 @@ class MelDataset(Dataset):
         if not self.finetune and self.train:
             gain = random.random() * (0.99 - 0.4) + 0.4
             flip = -1 if random.random() > 0.5 else 1
-            wav = flip * gain * wav / wav.abs().max()
+            wav = flip * gain * wav / max(wav.abs().max(), 1e-5)
 
         tgt_logmel = self.logmel(wav.unsqueeze(0)).squeeze(0)
 
